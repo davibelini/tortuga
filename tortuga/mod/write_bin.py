@@ -5,5 +5,9 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
-def write_hex(hexdecimal):
-    pass
+from binascii import unhexlify
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+def write_bin(hexdecimal):
+    binary_string = unhexlify(hexdecimal)

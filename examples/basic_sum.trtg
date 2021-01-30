@@ -1,4 +1,0 @@
-main {
-  attach{5}
-  take{stack_pointer}
-}

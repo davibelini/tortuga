@@ -8,7 +8,7 @@
 from .mod.lexer import Lexer
 from .mod.parse import parse
 from .mod.code_gen import gen_6502
-from .mod.write_hexa import write_hex
+from .mod.write_bin import write_bin
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -51,7 +51,7 @@ def main():
     except: print("compilation error")
         
     try:
-        write_hex(hexa)
+        write_bin(hexa)
     except: print("file writing error")
 
 main()
