@@ -5,10 +5,10 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
-from .mod.lexer import Lexer
-from .mod.parse import parse
-from .mod.code_gen import gen_6502
-from .mod.write_bin import write_bin
+from mod.lexer import Lexer
+from mod.parse import parse
+from mod.code_gen import gen_6502
+from mod.write_bin import write_bin
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -22,7 +22,10 @@ cli_parser = ArgumentParser(description="""
     basic_sum.exe
 """)
 
-cli_parser.add_argument("path", type=str, help="The path of the tortuga file that will be compiled")
+debug = True
+
+if debug: cli_parser.add_argument("--path", type=str, help="The path of the tortuga file that will be compiled")
+else: cli_parser.add_argument("path", type=str, help="The path of the tortuga file that will be compiled")
 
 args = cli_parser.parse_args()
 
@@ -54,4 +57,14 @@ def main():
         write_bin(hexa)
     except: print("file writing error")
 
-main()
+# main()
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
+def debug_lexer():
+    try:
+        lexer = Lexer("1 + 1")
+        tokens = lexer.tokens()
+    except Exception as e: print(e)
+
+debug_lexer()
