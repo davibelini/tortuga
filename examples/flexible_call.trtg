@@ -2,8 +2,8 @@ fn print_line s {
     dump s
 }
 
-use greet: "hi"
-use name: "davi" // typing is optional
+greet --- "hi" // define variables
+name --- "davi"
 
 print_line greet
 
