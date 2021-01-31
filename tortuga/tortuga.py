@@ -1,4 +1,4 @@
-# tortuga: a programming language for the 6502 CPU.
+# tortuga: a compiled programming language.
 # v0.1
 # davibelini <https://github.com/davibelini>
 # 2021-Jan-30
@@ -7,7 +7,7 @@
 
 from mod.lexer import Lexer
 from mod.parse import parse
-from mod.code_gen import gen_6502
+from mod.code_gen import gen_hex
 from mod.write_bin import write_bin
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
@@ -50,7 +50,7 @@ def main():
     except: print("context error")
 
     try:
-        hexa = gen_6502()
+        hexa = gen_hex()
     except: print("compilation error")
         
     try:
@@ -63,7 +63,7 @@ def main():
 
 def debug_lexer():
     try:
-        lexer = Lexer("1 + 1")
+        lexer = Lexer("1 + 1 * 1 - 5 / 34")
         tokens = lexer.tokens()
     except Exception as e: print(e)
 

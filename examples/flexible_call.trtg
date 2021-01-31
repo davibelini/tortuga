@@ -1,0 +1,18 @@
+fn print_line s {
+    dump s
+}
+
+use greet: "hi"
+use name: "davi" // typing is optional
+
+print_line greet
+
+"hello".print_line
+
+greet.print_line
+
+print_line `    // apply to all
+    greet
+    " "
+    name
+`

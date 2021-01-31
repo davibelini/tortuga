@@ -1,4 +1,4 @@
-# tortuga: a programming language for the 6502 CPU.
+# tortuga: a compiled programming language.
 # v0.1
 # davibelini <https://github.com/davibelini>
 # 2021-Jan-30
@@ -22,13 +22,16 @@ class Lexer:
             self.current_char = 0
 
     def make_num(self):
+        dot = 0
         num_string = self.current_char
         self.advance()
-        while self.current_char.isnumeric() and self.current_char != None:
-            self.advance()
+        while (self.current_char.isnumeric() or self.current_char == '.') and self.current_char != None:
+            if self.current_char == '.': dot += 1
+            if dot < 1: print("more than 1 dot in a number"); break
             num_string += self.current_char
+            self.advance()
 
-        return Token(TYPE_NUMBER, int(num_string))
+        return Token(TYPE_NUMBER, int(num_string)) if '.' not in num_string else Token(TYPE_NUMBER, float(num_string))
 
     def tokens(self):
         toks = []
