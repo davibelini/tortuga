@@ -5,6 +5,7 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
+from os import error
 from .tokens import Token
 from .token_types import *
 
@@ -15,30 +16,49 @@ class Lexer:
         self.text = iter(text)
         self.advance()
 
+    def error(self, e):
+        print(f"""
+            tortuga
+            ERROR: {e}
+        """)
     def advance(self):
         try:
             self.current_char = next(self.text)
         except StopIteration:
-            self.current_char = 0
+            self.current_char = None
 
     def make_num(self):
         dot = 0
         num_string = self.current_char
         self.advance()
-        while (self.current_char.isnumeric() or self.current_char == '.') and self.current_char != None:
-            if self.current_char == '.': dot += 1
-            if dot < 1: print("more than 1 dot in a number"); break
+        while self.current_char != None and (self.current_char in "0123456789" or self.current_char == '.'):
+            if self.current_char == '.':
+                dot += 1
+                if dot > 1: self.error("more than 1 dot in a number")
+                break
             num_string += self.current_char
             self.advance()
 
         return Token(TYPE_NUMBER, int(num_string)) if '.' not in num_string else Token(TYPE_NUMBER, float(num_string))
 
+    def make_dash(self):
+        if self.current_char != None and self.current_char == '-':
+            self.advance()
+            if self.current_char != '-':
+                self.error("'--' is not an operator") 
+                return Token(TYPE_ERROR, None)
+            return Token(TYPE_EQUALS, None)
+        else: return Token(TYPE_MINUS, None)
+
     def tokens(self):
         toks = []
         while self.current_char != None:
-            if self.current_char.isnumeric():
-                toks.append(self.make_num())
+            if self.current_char  == ' ':
                 self.advance()
+            elif self.current_char  == '\t':
+                self.advance()
+            elif self.current_char.isnumeric():
+                toks.append(self.make_num())
 
             elif self.current_char == '+':
                 self.advance()
@@ -46,7 +66,7 @@ class Lexer:
 
             elif self.current_char == '-':
                 self.advance()
-                toks.append(Token(TYPE_MINUS, None))
+                toks.append(self.make_dash())
 
             elif self.current_char == '*':
                 self.advance()
@@ -55,4 +75,8 @@ class Lexer:
             elif self.current_char == '/':
                 self.advance()
                 toks.append(Token(TYPE_SLASH, None))
+
+            else:
+                self.error(f"illegal character {self.current_char}")
+                break
         return toks

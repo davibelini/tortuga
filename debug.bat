@@ -1,3 +1,2 @@
 @echo off
-cd tortuga
-python tortuga.py
+python tortuga/tortuga.py
