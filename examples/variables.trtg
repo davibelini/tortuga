@@ -1,0 +1,3 @@
+fn main argv {
+    argument1 --- argv[0]
+}

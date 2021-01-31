@@ -13,13 +13,15 @@ from .token_types import *
 
 class Lexer:
     def __init__(self, text):
+        self.raw_text = text
         self.text = iter(text)
         self.advance()
 
-    def error(self, e):
+    def error(self, e, c_char):
         print(f"""
-            tortuga
+        Tortuga:
             ERROR: {e}
+                At {int(self.raw_text.index(c_char))}
         """)
     def advance(self):
         try:
@@ -34,7 +36,7 @@ class Lexer:
         while self.current_char != None and (self.current_char in "0123456789" or self.current_char == '.'):
             if self.current_char == '.':
                 dot += 1
-                if dot > 1: self.error("more than 1 dot in a number")
+                if dot > 1: self.error("more than 1 dot in a number", '.')
                 break
             num_string += self.current_char
             self.advance()
@@ -45,10 +47,10 @@ class Lexer:
         if self.current_char != None and self.current_char == '-':
             self.advance()
             if self.current_char != '-':
-                self.error("'--' is not an operator") 
+                self.error("'--' is not an operator", '--') 
                 return Token(TYPE_ERROR, None)
             return Token(TYPE_EQUALS, None)
-        else: return Token(TYPE_MINUS, None)
+        elif self.current_char != None and self.current_char != '-': return Token(TYPE_MINUS, None)
 
     def tokens(self):
         toks = []
@@ -77,6 +79,6 @@ class Lexer:
                 toks.append(Token(TYPE_SLASH, None))
 
             else:
-                self.error(f"illegal character {self.current_char}")
+                self.error(f"illegal character '{self.current_char}'", self.current_char)
                 break
         return toks

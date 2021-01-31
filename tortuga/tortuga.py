@@ -63,7 +63,7 @@ def main():
 
 def debug_lexer():
     try:
-        lexer = Lexer("11 * 1 + -1 ---")
+        lexer = Lexer("--")
         tokens = lexer.tokens()
         print(tokens)
     except Exception as e: print(e)
