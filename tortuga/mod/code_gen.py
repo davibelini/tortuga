@@ -5,5 +5,10 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
+# Opcodes:
+# http://sparksandflames.com/files/x86InstructionChart.html
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 def gen_hex(parse_tree):
     ast = parse_tree

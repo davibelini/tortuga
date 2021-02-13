@@ -2,7 +2,7 @@ fn print_line s {
     dump s
 }
 
-greet --- "hi" // define variables
+greet --- "hi"
 name --- "davi"
 
 print_line greet

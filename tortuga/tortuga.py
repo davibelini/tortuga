@@ -33,29 +33,37 @@ path = args.path
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
+def error(e):
+    print(f"""
+    Tortuga:
+        ERROR: {e}
+    """)
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 def main():
 
     try:
         src = open(path).read()
     except:
-        print("file reading error")
+        error("file reading error")
 
     try:
         lexer = Lexer(src)
         tokens = lexer.tokens()
-    except: print("syntax error")
+    except: error("syntax error")
 
     try:
         ast = parse(tokens)
-    except: print("context error")
+    except: error("context error")
 
     try:
         hexa = gen_hex()
-    except: print("compilation error")
+    except: error("compilation error")
         
     try:
         write_bin(hexa)
-    except: print("file writing error")
+    except: error("file writing error")
 
 # main()
 
@@ -63,7 +71,8 @@ def main():
 
 def debug_lexer():
     try:
-        lexer = Lexer("--")
+        one_char_token = ",{<?/-=.(*)}"
+        lexer = Lexer(one_char_token)
         tokens = lexer.tokens()
         print(tokens)
     except Exception as e: print(e)

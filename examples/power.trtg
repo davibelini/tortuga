@@ -1,0 +1,7 @@
+fn power x, n {
+    n < 0 ? give (power 1 / x, -n)
+    n = 0 ? give 1
+    n = 1 ? give x
+    n.is_even ? give (power x * x,  n / 2)
+    n.is_odd  ? give x * (power x * x, (n - 1) / 2)
+}

@@ -19,9 +19,12 @@ class Lexer:
 
     def error(self, e, c_char):
         print(f"""
-        Tortuga:
-            ERROR: {e}
-                At {int(self.raw_text.index(c_char))}
+        Tortuga
+            LEXER ERROR: {e}
+                At  
+                    char {int(self.raw_text.index(c_char))}
+                    {c_char}
+                    ^
         """)
     def advance(self):
         try:
@@ -46,11 +49,11 @@ class Lexer:
     def make_dash(self):
         if self.current_char != None and self.current_char == '-':
             self.advance()
-            if self.current_char != '-':
-                self.error("'--' is not an operator", '--') 
-                return Token(TYPE_ERROR, None)
-            return Token(TYPE_EQUALS, None)
-        elif self.current_char != None and self.current_char != '-': return Token(TYPE_MINUS, None)
+            if self.current_char == '-' and self.current_char != None:
+                return Token(TYPE_EQUALS, None)
+            self.error("'--' is not an operator", '--')
+            return Token(TYPE_ERROR, None)
+        return Token(TYPE_MINUS, None)
 
     def tokens(self):
         toks = []
@@ -77,6 +80,42 @@ class Lexer:
             elif self.current_char == '/':
                 self.advance()
                 toks.append(Token(TYPE_SLASH, None))
+            
+            elif self.current_char == ',':
+                self.advance()
+                toks.append(Token(TYPE_COMMA, None))
+            
+            elif self.current_char == '{':
+                self.advance()
+                toks.append(Token(TYPE_OPEN_C_BRACE, None))
+
+            elif self.current_char == '<':
+                self.advance()
+                toks.append(Token(TYPE_LESS_THAN, None))
+            
+            elif self.current_char == '?':
+                self.advance()
+                toks.append(Token(TYPE_IF, None))
+
+            elif self.current_char == '=':
+                self.advance()
+                toks.append(Token(TYPE_CHECK_EQUALS, None))
+
+            elif self.current_char == '.':
+                self.advance()
+                toks.append(Token(TYPE_DOT, None))
+
+            elif self.current_char == '(':
+                self.advance()
+                toks.append(Token(TYPE_OPEN_PARENTHESIS, None))
+
+            elif self.current_char == ')':
+                self.advance()
+                toks.append(Token(TYPE_CLOSE_PARENTHESIS, None))
+
+            elif self.current_char == '}':
+                self.advance()
+                toks.append(Token(TYPE_CLOSE_C_BRACE, None))
 
             else:
                 self.error(f"illegal character '{self.current_char}'", self.current_char)
