@@ -5,7 +5,6 @@
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
-from os import error
 from .tokens import Token
 from .token_types import *
 
@@ -16,15 +15,16 @@ class Lexer:
         self.raw_text = text
         self.text = iter(text)
         self.advance()
+        self.e = 0
 
     def error(self, e, c_char):
+        self.e = 1
         print(f"""
         Tortuga
             LEXER ERROR: {e}
-                At  
-                    char {int(self.raw_text.index(c_char))}
-                    {c_char}
-                    ^
+                At
+                    {self.raw_text}
+                    {" " * (len(self.raw_text) - (len(self.raw_text) - self.raw_text.index(c_char)))}^
         """)
     def advance(self):
         try:
@@ -60,8 +60,10 @@ class Lexer:
         while self.current_char != None:
             if self.current_char  == ' ':
                 self.advance()
+
             elif self.current_char  == '\t':
                 self.advance()
+
             elif self.current_char.isnumeric():
                 toks.append(self.make_num())
 
@@ -120,4 +122,6 @@ class Lexer:
             else:
                 self.error(f"illegal character '{self.current_char}'", self.current_char)
                 break
-        return toks
+        if not self.e:
+            return toks
+        return "\tERROR"

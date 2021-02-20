@@ -72,7 +72,10 @@ def main():
 def debug_lexer():
     try:
         one_char_token = ",{<?/-=.(*)}"
-        lexer = Lexer(one_char_token)
+        number_tokens = one_char_token + "123 3456 7"
+        id_tokens = number_tokens + " fn give x n"
+        #TODO: make id lexer
+        lexer = Lexer("¬")
         tokens = lexer.tokens()
         print(tokens)
     except Exception as e: print(e)
