@@ -10,6 +10,14 @@ from .token_types import *
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
+letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+keywords = [
+    "fn",
+    "give"
+]
+
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+
 class Lexer:
     def __init__(self, text):
         self.raw_text = text
@@ -54,6 +62,14 @@ class Lexer:
             self.error("'--' is not an operator", '--')
             return Token(TYPE_ERROR, None)
         return Token(TYPE_MINUS, None)
+
+    def make_id(self):
+        id_string = ''
+        while self.current_char != None and self.current_char in letters + "0123456789_":
+            id_string += self.current_char
+            self.advance()
+
+        return Token(TYPE_IDENTIFIER, id_string) if id_string not in keywords else Token(TYPE_KEYWORD, id_string)
 
     def tokens(self):
         toks = []
@@ -118,6 +134,9 @@ class Lexer:
             elif self.current_char == '}':
                 self.advance()
                 toks.append(Token(TYPE_CLOSE_C_BRACE, None))
+
+            elif self.current_char in letters + '_':
+                toks.append(self.make_id())
 
             else:
                 self.error(f"illegal character '{self.current_char}'", self.current_char)
