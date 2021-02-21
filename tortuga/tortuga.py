@@ -12,6 +12,8 @@ from mod.write_bin import write_bin
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
+from pprint import pprint
+
 from argparse import ArgumentParser
 
 cli_parser = ArgumentParser(description="""
@@ -71,13 +73,10 @@ def main():
 
 def debug_lexer():
     try:
-        one_char_token = ",{<?/-=.(*)}"
-        number_tokens = one_char_token + "123 3456 7"
-        id_tokens = number_tokens + " fn {give x n}"
-        #TODO: make id lexer
-        lexer = Lexer(id_tokens)
+        s = open("../examples/power.trtg", "r").read()
+        lexer = Lexer(s)
         tokens = lexer.tokens()
-        print(tokens)
+        pprint(tokens)
     except Exception as e: print(e)
 
 debug_lexer()

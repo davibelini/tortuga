@@ -24,13 +24,14 @@ class Lexer:
         self.text = iter(text)
         self.advance()
         self.e = 0
+        self.line = 1
 
-    def error(self, e, c_char):
+    def error(self, e, c_char, l):
         self.e = 1
         print(f"""
         Tortuga
             LEXER ERROR: {e}
-                At
+                At line {l}
                     {self.raw_text}
                     {" " * (len(self.raw_text) - (len(self.raw_text) - self.raw_text.index(c_char)))}^
         """)
@@ -77,7 +78,11 @@ class Lexer:
             if self.current_char  == ' ':
                 self.advance()
 
-            elif self.current_char  == '\t':
+            elif self.current_char == '\t':
+                self.advance()
+
+            elif self.current_char == '\n':
+                self.line += 1
                 self.advance()
 
             elif self.current_char.isnumeric():
@@ -139,7 +144,7 @@ class Lexer:
                 toks.append(self.make_id())
 
             else:
-                self.error(f"illegal character '{self.current_char}'", self.current_char)
+                self.error(f"illegal character '{self.current_char}'", self.current_char, self.line)
                 break
         if not self.e:
             return toks
