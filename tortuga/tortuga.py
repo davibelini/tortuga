@@ -14,10 +14,10 @@ from mod.write_bin import write_bin
 
 from pprint import pprint
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, PARSER
 
 cli_parser = ArgumentParser(description="""
-    tortuga: a programming language for the 6502 CPU.
+    tortuga: a compiled programming language.
     > tortuga basic_sum.trtg
     > cd out
     > ls
@@ -76,7 +76,7 @@ def debug_lexer():
         s = open("../examples/power.trtg", "r").read()
         lexer = Lexer(s, open("../examples/power.trtg"))
         tokens = lexer.tokens()
-        print(tokens)
+        pprint(tokens)
     except Exception as e: print(e)
 
     # Expected:
@@ -150,4 +150,13 @@ def debug_lexer():
     #    CLOSE_PARENTHESIS,
     #    CLOSE_C_BRACE]
 
-debug_lexer()
+def debug_parser():
+    try:
+        s = open("../examples/power.trtg", "r").read()
+        lexer = Lexer(s, open("../examples/power.trtg"))
+        tokens = lexer.tokens()
+        ast = parse(tokens)
+        pprint(ast)
+    except Exception as e: print(e)
+
+debug_parser()
