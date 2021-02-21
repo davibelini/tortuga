@@ -19,7 +19,9 @@ keywords = [
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 class Lexer:
-    def __init__(self, text):
+    def __init__(self, text, file):
+        self.file = file
+        self.lines = self.file.readlines()
         self.raw_text = text
         self.text = iter(text)
         self.advance()
@@ -28,12 +30,14 @@ class Lexer:
 
     def error(self, e, c_char, l):
         self.e = 1
+        line = self.lines[l - 1].replace("\n", "")
         print(f"""
         Tortuga
+
             LEXER ERROR: {e}
-                At line {l}
-                    {self.raw_text}
-                    {" " * (len(self.raw_text) - (len(self.raw_text) - self.raw_text.index(c_char)))}^
+                At line {l}, character {line.strip().index(c_char)}
+                {line}
+                {" " * (len(line) - (len(line) - line.index(c_char)))}^
         """)
     def advance(self):
         try:
@@ -48,8 +52,9 @@ class Lexer:
         while self.current_char != None and (self.current_char in "0123456789" or self.current_char == '.'):
             if self.current_char == '.':
                 dot += 1
-                if dot > 1: self.error("more than 1 dot in a number", '.')
-                break
+                if dot > 1: 
+                    self.error("more than 1 dot in a number", '.')
+                    break
             num_string += self.current_char
             self.advance()
 
